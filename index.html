@@ -1,255 +1,105 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="nl"> <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>House of Bliss | Premium Smartshop</title>
+    <title>House of Bliss | Private Selection</title>
     <style>
         :root {
-            --gold: #d4af37;
-            --dark: #121212;
-            --green: #8cb83e;
-            --red: #ff4d4d;
-            --light-bg: #f9f9f9;
-            --white: #ffffff;
+            --accent: #c5a059;
+            --dark: #000000;
+            --light: #f5f5f7;
+            --border: #e2e2e7;
+            --red: #ff3b30;
         }
 
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background: var(--light-bg); color: #333; line-height: 1.6; }
+        * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+        body { font-family: -apple-system, sans-serif; margin: 0; background: #fff; }
 
-        /* BOUTON FLOTTANT TELEGRAM */
-        .btn-float {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: var(--gold);
-            color: black;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            z-index: 9999;
-            animation: pulse 2s infinite;
+        /* HEADER & LANG SELECTOR */
+        header { 
+            position: sticky; top: 0; z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            border-bottom: 1px solid var(--border);
+            padding: 10px 20px;
+            display: flex; justify-content: space-between; align-items: center;
         }
-        .btn-float svg { width: 30px; height: 30px; fill: black; }
-        
-        @keyframes pulse {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7); }
-            70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(212, 175, 55, 0); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+        .logo { font-size: 14px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; color: #000; }
+
+        /* LE MENU DÉROULANT DES LANGUES (Style Photo) */
+        .lang-dropdown { position: relative; display: inline-block; cursor: pointer; }
+        .lang-current { 
+            display: flex; align-items: center; gap: 8px; 
+            border: 1px solid var(--border); padding: 5px 10px; border-radius: 4px;
+            font-size: 12px; font-weight: 600;
         }
-
-        /* NAVIGATION & LANGUE */
-        header { background: #000; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; }
-        .logo { color: var(--gold); font-size: 1.2rem; font-weight: bold; text-decoration: none; letter-spacing: 2px; text-transform: uppercase; }
-        
-        .lang-dropdown { position: relative; display: inline-block; }
-        .lang-btn { background: white; border: 1px solid #ccc; padding: 5px 10px; font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; gap: 5px; border-radius: 3px; }
-        .lang-content { display: none; position: absolute; right: 0; background: white; min-width: 120px; box-shadow: 0 8px 16px rgba(0,0,0,0.2); z-index: 1001; border-radius: 3px; }
-        .lang-content a { color: black; padding: 8px 12px; text-decoration: none; display: block; font-size: 0.8rem; border-bottom: 1px solid #eee; }
-        .lang-dropdown:hover .lang-content { display: block; }
-
-        /* BANNER CONFIDENCE */
-        .trust-bar { background: #eef2f3; display: flex; justify-content: space-around; padding: 8px; font-size: 0.65rem; text-transform: uppercase; font-weight: bold; color: #555; border-bottom: 1px solid #ddd; }
-
-        /* BANNÈRES PRINCIPALES */
-        .hero { display: flex; flex-direction: column; gap: 2px; width: 100%; }
-        .banner { height: 200px; background-size: cover; background-position: center; position: relative; display: flex; align-items: center; justify-content: center; color: white; text-align: center; }
-        .banner::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); }
-        .banner-inner { position: relative; z-index: 2; }
-        .banner h2 { font-size: 1.5rem; margin: 0; text-transform: uppercase; letter-spacing: 2px; }
-        .btn-buy { background: #000; color: white; padding: 8px 20px; text-decoration: none; display: inline-block; margin-top: 10px; font-weight: bold; border: 1px solid white; font-size: 0.7rem; }
-
-        /* GRILLE DE CATÉGORIES */
-        .container { max-width: 1200px; margin: auto; padding: 20px 10px; }
-        .section-title { text-align: center; text-transform: uppercase; font-size: 1rem; margin: 35px 0 15px; letter-spacing: 1px; border-bottom: 2px solid var(--gold); display: table; margin-left: auto; margin-right: auto; padding-bottom: 5px;}
-        
-        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-        .cat-card { background: white; position: relative; overflow: hidden; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; padding-bottom: 15px; }
-        .cat-card img { width: 100%; height: 150px; object-fit: cover; }
-        .cat-label { background: var(--green); color: white; position: absolute; top: 135px; left: 0; right: 0; padding: 5px; font-size: 0.6rem; font-weight: bold; text-transform: uppercase; }
-        .cat-card h3 { font-size: 0.8rem; margin: 25px 5px 5px; height: 30px; display: flex; align-items: center; justify-content: center; text-transform: uppercase; }
-        .cat-card p { font-size: 0.7rem; color: var(--green); font-weight: bold; margin: 0; }
-
-        /* PRODUITS & PRIX */
-        .prod-card { background: white; border-radius: 4px; padding: 10px; position: relative; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; flex-direction: column; justify-content: space-between;}
-        .promo-badge { background: var(--red); color: white; position: absolute; top: 10px; right: 10px; padding: 3px 7px; font-size: 0.7rem; font-weight: bold; border-radius: 3px; z-index: 5;}
-        .price-box { margin-top: 10px; margin-bottom: 10px;}
-        .old-price { text-decoration: line-through; color: #999; font-size: 0.8rem; margin-right: 5px; }
-        .new-price { color: var(--red); font-weight: bold; font-size: 1.1rem; }
-        .order-btn-prod { background: var(--gold); color: black; text-decoration: none; padding: 8px; font-size: 0.75rem; font-weight: bold; border-radius: 3px; text-transform: uppercase;}
-
-        /* FAQ / FICHE TECHNIQUE */
-        .faq-section { margin-top: 40px; }
-        .faq-item { background: white; border: 1px solid #ddd; margin-bottom: 8px; border-radius: 5px; overflow: hidden;}
-        .faq-trigger { width: 100%; padding: 15px; text-align: left; background: #fff; border: none; font-size: 0.85rem; font-weight: bold; display: flex; justify-content: space-between; cursor: pointer; color: #444;}
-        .faq-content { padding: 0 15px 15px; font-size: 0.8rem; color: #666; display: none; }
-
-        /* FOOTER */
-        .shipping-bar { background: var(--green); color: white; text-align: center; padding: 18px; font-size: 0.85rem; font-weight: bold; margin-top: 30px; text-transform: uppercase; }
-        footer { background: #000; color: #666; padding: 40px 20px; text-align: center; font-size: 0.7rem; }
-
-        @media (min-width: 768px) {
-            .grid { grid-template-columns: repeat(4, 1fr); }
-            .banner { height: 350px; }
+        .lang-list { 
+            display: none; position: absolute; right: 0; top: 100%;
+            background: white; border: 1px solid var(--border);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 120px; z-index: 1100;
         }
+        .lang-dropdown:hover .lang-list { display: block; }
+        .lang-item { 
+            display: flex; align-items: center; gap: 10px; padding: 10px;
+            text-decoration: none; color: #333; font-size: 11px; font-weight: 600;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .lang-item:hover { background: #f9f9f9; }
+        .flag { width: 18px; height: 12px; object-fit: cover; border: 1px solid #ddd; }
+
+        /* SECTIONS PRODUITS */
+        .hero-banner { height: 180px; background: #000; color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+        .hero-banner h2 { font-size: 20px; letter-spacing: 2px; margin: 0; }
+        .shop-btn { margin-top: 10px; background: #fff; color: #000; padding: 8px 15px; font-size: 10px; font-weight: 700; text-decoration: none; text-transform: uppercase; }
+
+        .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--border); }
+        .card { background: #fff; padding: 15px; text-align: center; position: relative; }
+        .badge { position: absolute; top: 10px; right: 10px; background: var(--red); color: white; font-size: 10px; font-weight: 800; padding: 3px 6px; }
+        .card img { width: 100%; height: 130px; object-fit: contain; }
+        .title { font-size: 12px; font-weight: 600; margin: 10px 0; text-transform: uppercase; }
+        .price { font-size: 14px; color: var(--red); font-weight: 700; }
+        .old-price { color: #999; text-decoration: line-through; font-size: 11px; margin-right: 5px; }
     </style>
 </head>
 <body>
 
-<a href="https://t.me/Houseofbliss_store" class="btn-float" title="Contact us on Telegram">
-    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .24z"/></svg>
-</a>
-
-<header>
-    <a href="#" class="logo">House of Bliss</a>
-    <div class="lang-dropdown">
-        <button class="lang-btn">🇺🇸 EN ▾</button>
-        <div class="lang-content">
-            <a href="#">🇫🇷 FR - French</a>
-            <a href="#">🇳🇱 NL - Dutch</a>
-            <a href="#">🇩🇪 DE - German</a>
-        </div>
-    </div>
-</header>
-
-<div class="trust-bar">
-    <span>🛡️ Discreet Shipping</span>
-    <span>💎 Lab Tested</span>
-    <span>🚀 Fast EU Delivery</span>
-</div>
-
-<div class="hero">
-    <div class="banner" style="background-image: url('https://images.unsplash.com/photo-1603909223429-69bb7101f420?q=80&w=1000');">
-        <div class="banner-inner">
-            <h2>CBD SHOP</h2>
-            <a href="https://t.me/Houseofbliss_store" class="btn-buy">SHOP NOW ></a>
-        </div>
-    </div>
-    <div class="banner" style="background-image: url('https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?q=80&w=1000');">
-        <div class="banner-inner">
-            <h2>PARTY & RELAX</h2>
-            <a href="https://t.me/Houseofbliss_store" class="btn-buy">EXPLORE ></a>
-        </div>
-    </div>
-</div>
-
-<div class="container">
-    
-    <h2 class="section-title">Store Categories</h2>
-    <div class="grid">
-        <div class="cat-card">
-            <img src="https://images.unsplash.com/photo-1556912998-c57cc6b63cd7?q=80&w=400">
-            <div class="cat-label">MUSHROOMS</div>
-            <h3>GROWKITS & TRUFFLES</h3>
-            <p>19 PRODUCTS</p>
-        </div>
-        <div class="cat-card">
-            <img src="https://images.unsplash.com/photo-1628102421711-828882a6bd83?q=80&w=400">
-            <div class="cat-label">EXTRACTS</div>
-            <h3>PURE PLANT EXTRACTS</h3>
-            <p>27 PRODUCTS</p>
-        </div>
-        <div class="cat-card">
-            <img src="https://images.unsplash.com/photo-1520004434532-668416a08753?q=80&w=400">
-            <div class="cat-label">APHRODISIACS</div>
-            <h3>SEXUAL WELLNESS</h3>
-            <p>21 PRODUCTS</p>
-        </div>
-        <div class="cat-card">
-            <img src="https://images.unsplash.com/photo-1589156229687-496a31ad1d1f?q=80&w=400">
-            <div class="cat-label">KANNA</div>
-            <h3>KANNA & KAVA</h3>
-            <p>12 PRODUCTS</p>
-        </div>
-    </div>
-
-    <h2 class="section-title">Best Sellers -25% Off</h2>
-    <div class="grid">
-        <div class="prod-card">
-            <div class="promo-badge">-25%</div>
-            <img src="https://images.unsplash.com/photo-1550807014-1236e91b92d4?q=80&w=400" style="width:100%">
-            <h4>Atlantis Truffles (15g)</h4>
-            <div class="price-box">
-                <span class="old-price">24.95€</span>
-                <span class="new-price">18.71€</span>
+    <header>
+        <a href="#" class="logo">House of Bliss</a>
+        
+        <div class="lang-dropdown">
+            <div class="lang-current">
+                <img src="https://flagcdn.com/w20/nl.png" class="flag"> NL
             </div>
-            <a href="https://t.me/Houseofbliss_store" class="order-btn-prod">Buy on Telegram</a>
-        </div>
-        <div class="prod-card">
-            <div class="promo-badge">-25%</div>
-            <img src="https://images.unsplash.com/photo-1533106497176-45ae19e68ba2?q=80&w=400" style="width:100%">
-            <h4>MDAA Party Pills (4pc)</h4>
-            <div class="price-box">
-                <span class="old-price">15.00€</span>
-                <span class="new-price">11.25€</span>
-            </div>
-            <a href="https://t.me/Houseofbliss_store" class="order-btn-prod">Buy on Telegram</a>
-        </div>
-        <div class="prod-card">
-            <div class="promo-badge">-25%</div>
-            <img src="https://images.unsplash.com/photo-1559181567-c3190ca9959b?q=80&w=400" style="width:100%">
-            <h4>Kanna 40x Extract (1g)</h4>
-            <div class="price-box">
-                <span class="old-price">30.00€</span>
-                <span class="new-price">22.50€</span>
-            </div>
-            <a href="https://t.me/Houseofbliss_store" class="order-btn-prod">Buy on Telegram</a>
-        </div>
-        <div class="prod-card">
-            <div class="promo-badge">-25%</div>
-            <img src="https://images.unsplash.com/photo-1536630596251-b12ba0d9f7d4?q=80&w=400" style="width:100%">
-            <h4>Amnesia Haze Seeds (3)</h4>
-            <div class="price-box">
-                <span class="old-price">22.00€</span>
-                <span class="new-price">16.50€</span>
-            </div>
-            <a href="https://t.me/Houseofbliss_store" class="order-btn-prod">Buy on Telegram</a>
-        </div>
-    </div>
-
-    <div class="faq-section">
-        <h2 class="section-title">Technical Guides</h2>
-        <div class="faq-item">
-            <button class="faq-trigger" onclick="toggleFaq(this)">Effect Duration Guide <span>+</span></button>
-            <div class="faq-content">
-                Truffles and Mushrooms typically last 4-6 hours. Party pills like MDAA offer 3-5 hours of stimulation.
+            <div class="lang-list">
+                <a href="#" class="lang-item"><img src="https://flagcdn.com/w20/nl.png" class="flag"> NL</a>
+                <a href="#" class="lang-item"><img src="https://flagcdn.com/w20/us.png" class="flag"> EN</a>
+                <a href="#" class="lang-item"><img src="https://flagcdn.com/w20/fr.png" class="flag"> FR</a>
+                <a href="#" class="lang-item"><img src="https://flagcdn.com/w20/de.png" class="flag"> DE</a>
+                <a href="#" class="lang-item"><img src="https://flagcdn.com/w20/it.png" class="flag"> IT</a>
+                <a href="#" class="lang-item"><img src="https://flagcdn.com/w20/pl.png" class="flag"> PL</a>
+                <a href="#" class="lang-item"><img src="https://flagcdn.com/w20/es.png" class="flag"> ES</a>
             </div>
         </div>
-        <div class="faq-item">
-            <button class="faq-trigger" onclick="toggleFaq(this)">Shipping & Countries <span>+</span></button>
-            <div class="faq-content">
-                Discreet shipping to all EU countries. Free shipping on orders over 150€. No external branding.
-            </div>
+    </header>
+
+    <div class="hero-banner">
+        <h2>HEALTHSHOP</h2>
+        <a href="#" class="shop-btn">Shop nu ></a>
+    </div>
+
+    <div class="product-grid">
+        <div class="card">
+            <div class="badge">-25%</div>
+            <img src="https://www.tatanka.nl/wp-content/uploads/2018/06/Kratopia-Red-Bali-Kratom-600x600.jpg">
+            <div class="title">Kratom Red Bali</div>
+            <div class="price"><span class="old-price">14,95 €</span>11,21 €</div>
+        </div>
+        <div class="card">
+            <div class="badge">-25%</div>
+            <img src="https://www.tatanka.nl/wp-content/uploads/2013/05/Black-Stone-Spray-for-men.jpg">
+            <div class="title">Black Stone Spray</div>
+            <div class="price"><span class="old-price">13,00 €</span>9,75 €</div>
         </div>
     </div>
-</div>
-
-<div class="shipping-bar">
-    🚚 FREE SHIPPING FROM 150€ | <a href="https://t.me/Houseofbliss_store" style="color:white; text-decoration: underline;">ORDER LIST</a>
-</div>
-
-<footer>
-    <p>© 2025 House of Bliss - Dutch Excellence.<br>Professional Smartshop sourcing since 2025.</p>
-</footer>
-
-<script>
-    function toggleFaq(btn) {
-        const content = btn.nextElementSibling;
-        const span = btn.querySelector('span');
-        if (content.style.display === "block") {
-            content.style.display = "none";
-            span.innerText = "+";
-        } else {
-            content.style.display = "block";
-            span.innerText = "-";
-        }
-    }
-</script>
 
 </body>
-                                             </html>
-                                             
+</html>
