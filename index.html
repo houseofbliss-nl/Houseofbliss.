@@ -3,175 +3,190 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>House of Bliss - Smartshop & Health</title>
+    <title>House of Bliss | Smartshop & More</title>
     <style>
         :root {
-            --primary-color: #2e7d32;
-            --secondary-color: #fbc02d;
-            --dark-bg: #1a1a1a;
-            --light-text: #ffffff;
+            --primary: #2e7d32;
+            --accent: #fbc02d;
+            --dark: #121212;
+            --gray: #f4f4f4;
         }
 
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background: #f9f9f9; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: var(--gray); color: #333; }
 
-        /* --- Age Gate --- */
+        /* --- Écran de vérification d'âge --- */
         #age-gate {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95); color: white; display: flex;
-            flex-direction: column; justify-content: center; align-items: center;
-            z-index: 10000; text-align: center; padding: 20px;
+            position: fixed; inset: 0; background: var(--dark); color: white;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 2000; text-align: center;
         }
-        .btn-age { padding: 15px 30px; margin: 10px; border: none; cursor: pointer; font-weight: bold; border-radius: 5px; }
-        .btn-yes { background: var(--primary-color); color: white; }
+        .btn-check { padding: 15px 40px; margin: 10px; border: none; cursor: pointer; font-weight: bold; border-radius: 30px; }
+        .btn-yes { background: var(--primary); color: white; }
 
         /* --- Header & Navigation --- */
-        .free-shipping { background: var(--secondary-color); text-align: center; padding: 8px; font-weight: bold; font-size: 0.9em; }
+        header { background: var(--dark); color: white; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.5rem; font-weight: bold; color: var(--accent); cursor: pointer; }
+        .shipping-bar { background: var(--accent); text-align: center; padding: 5px; font-weight: bold; font-size: 0.8rem; }
         
-        header { background: var(--dark-bg); color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
-        
-        .logo { font-size: 1.8em; font-weight: bold; color: var(--secondary-color); }
-        
-        .lang-selector select { background: #333; color: white; border: 1px solid #555; padding: 5px; border-radius: 3px; }
+        .lang-dropdown select { background: transparent; color: white; border: 1px solid #444; padding: 5px; }
 
-        nav { background: #333; padding: 10px; text-align: center; position: sticky; top: 0; z-index: 100; }
-        nav a { color: white; text-decoration: none; margin: 0 15px; font-size: 0.9em; text-transform: uppercase; }
+        .container { max-width: 1100px; margin: 20px auto; padding: 20px; }
 
-        /* --- Grid Produits --- */
-        .container { max-width: 1200px; margin: 20px auto; padding: 0 20px; }
-        .category-title { border-bottom: 2px solid var(--primary-color); padding-bottom: 10px; margin-top: 40px; color: #333; }
-        
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; margin-top: 20px; }
-        
-        .product-card { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: 0.3s; text-align: center; padding-bottom: 20px; }
-        .product-card:hover { transform: translateY(-5px); }
-        .product-card img { width: 100%; height: 200px; object-fit: cover; background: #eee; }
-        .product-card h3 { font-size: 1.1em; margin: 15px 0 5px; }
-        .product-card p { color: #666; font-size: 0.9em; padding: 0 10px; }
-        
-        .buy-btn { 
-            display: inline-block; background: #24A1DE; color: white; 
-            text-decoration: none; padding: 10px 20px; border-radius: 20px; 
-            margin-top: 15px; font-weight: bold; transition: 0.3s;
+        /* --- Grille des Catégories --- */
+        .category-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .category-card { 
+            position: relative; height: 250px; border-radius: 15px; overflow: hidden; 
+            cursor: pointer; transition: transform 0.3s; 
         }
-        .buy-btn:hover { background: #1c82b3; }
+        .category-card:hover { transform: scale(1.03); }
+        .category-card img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.6); }
+        .category-card h2 { 
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+            color: white; margin: 0; text-transform: uppercase; letter-spacing: 2px; text-align: center;
+        }
 
-        footer { background: var(--dark-bg); color: #888; text-align: center; padding: 40px; margin-top: 50px; }
+        /* --- Vue Produits (Cachée par défaut) --- */
+        #products-view { display: none; }
+        .back-btn { background: #ddd; padding: 10px 20px; border: none; cursor: pointer; border-radius: 5px; margin-bottom: 20px; }
+        
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+        .product-card { background: white; padding: 15px; border-radius: 10px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .product-card img { width: 100%; height: 200px; object-fit: cover; border-radius: 8px; }
+        .price { color: var(--primary); font-weight: bold; font-size: 1.2rem; margin: 10px 0; }
+        
+        .buy-link { 
+            display: block; background: #24A1DE; color: white; text-decoration: none; 
+            padding: 10px; border-radius: 5px; font-weight: bold; 
+        }
+
+        footer { text-align: center; padding: 40px; font-size: 0.8rem; color: #888; }
     </style>
 </head>
 <body>
 
     <div id="age-gate">
-        <h1>House of Bliss</h1>
-        <p>Bent u 18 jaar of ouder? / Avez-vous plus de 18 ans ?</p>
+        <h1 style="color:var(--accent)">HOUSE OF BLISS</h1>
+        <p>Ben je 18 jaar of ouder om deze winkel te betreden?</p>
         <div>
-            <button class="btn-age btn-yes" onclick="verifyAge(true)">JA / OUI</button>
-            <button class="btn-age" onclick="verifyAge(false)">NEE / NON</button>
+            <button class="btn-check btn-yes" onclick="enterStore()">JA, IK BEN 18+</button>
+            <button class="btn-check" onclick="location.href='https://google.com'">NEE</button>
         </div>
     </div>
 
-    <div class="free-shipping">
-        🚚 Gratis verzending vanaf €150 / Livraison gratuite dès 150€
-    </div>
-
-    <header>
-        <div class="logo">HOUSE OF BLISS</div>
-        <div class="lang-selector">
-            <select onchange="alert('Langue changée (Fonction à lier à un traducteur)')">
-                <option value="nl">Nederlands 🇳🇱</option>
-                <option value="fr">Français 🇫🇷</option>
-                <option value="en">English 🇬🇧</option>
-                <option value="de">Deutsch 🇩🇪</option>
-            </select>
-        </div>
-    </header>
-
-    <nav>
-        <a href="#smartshop">Smartshop</a>
-        <a href="#seedshop">Seedshop</a>
-        <a href="#healthshop">Health</a>
-        <a href="#test">Drugstest</a>
-        <a href="#cbd">CBD Shop</a>
-        <a href="#aphro">Aphrodisiaca</a>
-    </nav>
-
-    <div class="container">
+    <div id="site-content" style="display:none">
+        <div class="shipping-bar">GRATIS VERZENDING VANAF €150 📦</div>
         
-        <h2 id="smartshop" class="category-title">1. Smartshop (Truffels & Nootropics)</h2>
-        <div class="product-grid">
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1550989460-0adf9ea622e2?q=80&w=400" alt="Truffels">
-                <h3>Magische Truffels</h3>
-                <p>Atlantis, Hollandia, Mexicana.</p>
-                <a href="https://t.me/Houseofbliss_store" class="buy-btn">Kopen op Telegram</a>
+        <header>
+            <div class="logo" onclick="showCategories()">HOUSE OF BLISS</div>
+            <div class="lang-dropdown">
+                <select>
+                    <option>Nederlands 🇳🇱</option>
+                    <option>Français 🇫🇷</option>
+                    <option>English 🇬🇧</option>
+                </select>
             </div>
+        </header>
+
+        <div class="container">
+            
+            <div id="categories-view">
+                <h1 style="text-align: center; margin-bottom: 40px;">Onze Categorieën</h1>
+                <div class="category-grid">
+                    <div class="category-card" onclick="showProducts('smartshop')">
+                        <img src="https://images.unsplash.com/photo-1550989460-0adf9ea622e2?w=500" alt="Smartshop">
+                        <h2>Smartshop</h2>
+                    </div>
+                    <div class="category-card" onclick="showProducts('seedshop')">
+                        <img src="https://images.unsplash.com/photo-1603909223429-69bb7101f420?w=500" alt="Seedshop">
+                        <h2>Seedshop</h2>
+                    </div>
+                    <div class="category-card" onclick="showProducts('healthshop')">
+                        <img src="https://images.unsplash.com/photo-1512069772995-ec65ed45afd6?w=500" alt="Healthshop">
+                        <h2>Healthshop</h2>
+                    </div>
+                    <div class="category-card" onclick="showProducts('drugs-test')">
+                        <img src="https://images.unsplash.com/photo-1584036561566-baf8f5f1b144?w=500" alt="Drugstest">
+                        <h2>Drugstest</h2>
+                    </div>
+                    <div class="category-card" onclick="showProducts('cbd-shop')">
+                        <img src="https://images.unsplash.com/photo-1596491184975-27ae1d3024b4?w=500" alt="CBD Shop">
+                        <h2>CBD Shop</h2>
+                    </div>
+                    <div class="category-card" onclick="showProducts('aphrodisiacs')">
+                        <img src="https://images.unsplash.com/photo-1515261543313-5a02484a9e22?w=500" alt="Aphrodisiacs">
+                        <h2>Aphrodisiaques</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div id="products-view">
+                <button class="back-btn" onclick="showCategories()">← Terug naar categorieën</button>
+                <h2 id="current-category-name" style="text-transform: uppercase;"></h2>
+                <div id="product-list" class="product-grid">
+                    </div>
+            </div>
+
         </div>
 
-        <h2 id="seedshop" class="category-title">2. Seedshop (Cannabis Zaden)</h2>
-        <div class="product-grid">
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1603909223429-69bb7101f420?q=80&w=400" alt="Seeds">
-                <h3>Feminized Seeds</h3>
-                <p>Hoogwaardige zaden voor verzamelaars.</p>
-                <a href="https://t.me/Houseofbliss_store" class="buy-btn">Kopen op Telegram</a>
-            </div>
-        </div>
-
-        <h2 id="healthshop" class="category-title">3. Healthshop (Supplementen)</h2>
-        <div class="product-grid">
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1584017911766-d451b3d0e843?q=80&w=400" alt="Vitamines">
-                <h3>Superfoods & Vitamines</h3>
-                <p>Natuurlijke ondersteuning voor uw lichaam.</p>
-                <a href="https://t.me/Houseofbliss_store" class="buy-btn">Kopen op Telegram</a>
-            </div>
-        </div>
-
-        <h2 id="test" class="category-title">4. Drugstest (Zelftests)</h2>
-        <div class="product-grid">
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1579152276506-2d5ce1d855b6?q=80&w=400" alt="Test kit">
-                <h3>EZ Test Kits</h3>
-                <p>Test de zuiverheid van uw producten.</p>
-                <a href="https://t.me/Houseofbliss_store" class="buy-btn">Kopen op Telegram</a>
-            </div>
-        </div>
-
-        <h2 id="cbd" class="category-title">5. CBD Shop</h2>
-        <div class="product-grid">
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1596491184975-27ae1d3024b4?q=80&w=400" alt="CBD Oil">
-                <h3>Full Spectrum CBD Olie</h3>
-                <p>100% natuurlijk en legaal.</p>
-                <a href="https://t.me/Houseofbliss_store" class="buy-btn">Kopen op Telegram</a>
-            </div>
-        </div>
-
-        <h2 id="aphro" class="category-title">6. Aphrodisiaca (Liefdeskruiden)</h2>
-        <div class="product-grid">
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1615485290382-441e4d049cb5?q=80&w=400" alt="Love">
-                <h3>Spanish Fly / Herbs</h3>
-                <p>Natuurlijke stimulansen voor passie.</p>
-                <a href="https://t.me/Houseofbliss_store" class="buy-btn">Kopen op Telegram</a>
-            </div>
-        </div>
-
+        <footer>
+            <p>&copy; 2025 House of Bliss. Verantwoordelijk gebruik vereist.</p>
+        </footer>
     </div>
-
-    <footer>
-        <p>&copy; 2025 House of Bliss - All Rights Reserved</p>
-        <p>Waarschuwing: Producten alleen voor volwassenen. Gebruik verantwoord.</p>
-    </footer>
 
     <script>
-        function verifyAge(isAdult) {
-            if(isAdult) {
-                document.getElementById('age-gate').style.display = 'none';
-            } else {
-                window.location.href = "https://www.google.com";
-            }
+        // Données des produits (Exemple pour illustrer)
+        const productsData = {
+            'smartshop': [
+                { name: 'Truffles Atlantis', price: '25.00€', img: 'https://images.unsplash.com/photo-1550989460-0adf9ea622e2?w=300' },
+                { name: 'Space Caps', price: '15.00€', img: 'https://images.unsplash.com/photo-1471193945509-9ad0617afabf?w=300' }
+            ],
+            'seedshop': [
+                { name: 'White Widow Seeds', price: '30.00€', img: 'https://images.unsplash.com/photo-1603909223429-69bb7101f420?w=300' }
+            ],
+            'healthshop': [
+                { name: 'Ashwagandha Extract', price: '19.00€', img: 'https://images.unsplash.com/photo-1611244420018-9129b003666f?w=300' }
+            ],
+            'drugs-test': [
+                { name: 'EZ Test Ecstasy', price: '4.50€', img: 'https://images.unsplash.com/photo-1579152276506-2d5ce1d855b6?w=300' }
+            ],
+            'cbd-shop': [
+                { name: 'CBD Oil 10%', price: '45.00€', img: 'https://images.unsplash.com/photo-1596491184975-27ae1d3024b4?w=300' }
+            ],
+            'aphrodisiacs': [
+                { name: 'Spanish Fly', price: '22.00€', img: 'https://images.unsplash.com/photo-1515261543313-5a02484a9e22?w=300' }
+            ]
+        };
+
+        function enterStore() {
+            document.getElementById('age-gate').style.display = 'none';
+            document.getElementById('site-content').style.display = 'block';
+        }
+
+        function showProducts(catKey) {
+            document.getElementById('categories-view').style.display = 'none';
+            document.getElementById('products-view').style.display = 'block';
+            document.getElementById('current-category-name').innerText = catKey;
+
+            const list = document.getElementById('product-list');
+            list.innerHTML = ''; // Vide la liste actuelle
+
+            productsData[catKey].forEach(product => {
+                list.innerHTML += `
+                    <div class="product-card">
+                        <img src="${product.img}" alt="${product.name}">
+                        <h3>${product.name}</h3>
+                        <p class="price">${product.price}</p>
+                        <a href="https://t.me/Houseofbliss_store" class="buy-link">Koop op Telegram</a>
+                    </div>
+                `;
+            });
+        }
+
+        function showCategories() {
+            document.getElementById('categories-view').style.display = 'block';
+            document.getElementById('products-view').style.display = 'none';
         }
     </script>
 </body>
-                    </html>
-                    
+                        </html>
+                        
